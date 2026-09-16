@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Confirmar Deleção - Biblioteca{% endblock %}
+
+{% block conteudo %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">⚠️ Confirmar Deleção</h5>
+            </div>
+            <div class="card-body">
+                <p>Tem certeza que deseja deletar este acervo?</p>
+
+                <div class="alert alert-warning">
+                    <strong>{{ acervo.titulo }}</strong><br>
+                    <small>Autor: {{ acervo.autor }} ({{ acervo.ano }})</small>
+                </div>
+
+                <p class="text-muted small">Esta ação não pode ser desfeita!</p>
+
+                <form method="post" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-custom">Confirmar Deleção</button>
+                    <a href="{% url 'acervo:detalhe_acervo' acervo.pk %}" class="btn btn-secondary btn-custom">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

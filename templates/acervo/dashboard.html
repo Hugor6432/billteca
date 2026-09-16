@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Dashboard - Biblioteca{% endblock %}
+
+{% block conteudo %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1 class="mb-4">📊 Dashboard da Biblioteca</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Total de Acervos</h5>
+                <h2 class="text-primary">{{ total_acervos }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Acervos Digitais</h5>
+                <h2 class="text-success">{{ acervos_digitais }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Acervos Físicos</h5>
+                <h2 class="text-warning">{{ acervos_fisicos }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Disponíveis</h5>
+                <h2 class="text-info">{{ acervos_disponiveis }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Acervos por Categoria (DDC)</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tbody>
+                            {% for categoria, quantidade in categorias.items %}
+                                {% if quantidade > 0 %}
+                                <tr>
+                                    <td>{{ categoria }}</td>
+                                    <td><span class="badge bg-secondary">{{ quantidade }}</span></td>
+                                </tr>
+                                {% endif %}
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center text-muted">Nenhum acervo cadastrado</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Últimos Acervos Adicionados</h5>
+            </div>
+            <div class="card-body">
+                {% if ultimos_acervos %}
+                <ul class="list-group list-group-flush">
+                    {% for acervo in ultimos_acervos %}
+                    <li class="list-group-item">
+                        <a href="{% url 'acervo:detalhe_acervo' acervo.pk %}" class="text-decoration-none">
+                            <strong>{{ acervo.titulo }}</strong>
+                        </a>
+                        <br>
+                        <small class="text-muted">{{ acervo.autor }} - {{ acervo.ano }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted text-center">Nenhum acervo cadastrado</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <a href="{% url 'acervo:lista_acervos' %}" class="btn btn-primary btn-lg">Ver Todos os Acervos</a>
+                <a href="{% url 'acervo:criar_acervo' %}" class="btn btn-success btn-lg">Novo Acervo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

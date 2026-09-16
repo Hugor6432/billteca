@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Acervos - Biblioteca{% endblock %}
+
+{% block conteudo %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>📚 Acervos da Biblioteca</h1>
+        <p class="text-muted">Total: <strong>{{ total }}</strong> | Disponíveis: <strong>{{ disponivel }}</strong> | Indisponíveis: <strong>{{ indisponivel }}</strong></p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'acervo:criar_acervo' %}" class="btn btn-success btn-custom">+ Novo Acervo</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">🔍 Pesquisar Acervos</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                {{ form_search.nome }}
+            </div>
+            <div class="col-md-4">
+                {{ form_search.tipo_acervo }}
+            </div>
+            <div class="col-md-3">
+                {{ form_search.categoria }}
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Pesquisar</button>
+            </div>
+            <div class="col-md-12">
+                <a href="{% url 'acervo:lista_acervos' %}" class="btn btn-outline-secondary btn-sm">Limpar Filtros</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% if acervos %}
+        {% for acervo in acervos %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ acervo.titulo }}</h5>
+                    <p class="card-text text-muted">
+                        <small><strong>Autor:</strong> {{ acervo.autor }}</small><br>
+                        <small><strong>Ano:</strong> {{ acervo.ano }}</small><br>
+                        <small><strong>Tipo:</strong>
+                            {% if acervo.tipo_acervo == 'digital' %}
+                            <span class="badge bg-info">Digital</span>
+                            {% else %}
+                            <span class="badge bg-warning">Físico</span>
+                            {% endif %}
+                        </small><br>
+                        <small><strong>Categoria:</strong> {{ acervo.get_categoria_display }}</small>
+                    </p>
+                    <p class="card-text">
+                        {% if acervo.disponivel %}
+                        <span class="badge bg-success">Disponível</span>
+                        {% else %}
+                        <span class="badge bg-danger">Indisponível</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="{% url 'acervo:detalhe_acervo' acervo.pk %}" class="btn btn-sm btn-primary">Ver Detalhes</a>
+                    <a href="{% url 'acervo:editar_acervo' acervo.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="col-md-12">
+        <div class="alert alert-info text-center">
+            <h5>Nenhum acervo encontrado</h5>
+            <p>Não há acervos que correspondam aos critérios de busca.</p>
+            <a href="{% url 'acervo:criar_acervo' %}" class="btn btn-primary">Criar Primeiro Acervo</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
